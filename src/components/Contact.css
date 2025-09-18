@@ -1,0 +1,33 @@
+.contact-section {
+  padding: 60px 20px;
+  background-color: #282c34;
+  color: white;
+  text-align: center;
+}
+
+.contact-content p {
+  font-size: 1.2em;
+  margin-bottom: 30px;
+}
+
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.contact-link-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #61dafb;
+  color: #282c34;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.contact-link-btn:hover {
+  background-color: #fff;
+  transform: translateY(-3px);
+}
