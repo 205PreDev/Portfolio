@@ -1,0 +1,143 @@
+import React, { useState, useRef, useEffect } from 'react';
+import Message from './Message';
+import { MessageType, QUICK_ACTIONS, getBotResponse } from '../../data/chatbotData';
+
+interface ChatInterfaceProps {
+    onClose: () => void;
+}
+
+const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
+    const [messages, setMessages] = useState<MessageType[]>([
+        {
+            id: 'welcome',
+            text: '안녕하세요! 무엇을 도와드릴까요?',
+            sender: 'bot',
+            timestamp: new Date(),
+        },
+    ]);
+    const [inputValue, setInputValue] = useState('');
+    const [isTyping, setIsTyping] = useState(false);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, isTyping]);
+
+    const handleSend = (text: string) => {
+        if (!text.trim()) return;
+
+        const userMessage: MessageType = {
+            id: Date.now().toString(),
+            text,
+            sender: 'user',
+            timestamp: new Date(),
+        };
+
+        setMessages((prev) => [...prev, userMessage]);
+        setInputValue('');
+        setIsTyping(true);
+
+        // Simulate bot thinking/typing
+        setTimeout(() => {
+            const response = getBotResponse(text);
+            const botMessage: MessageType = {
+                id: (Date.now() + 1).toString(),
+                text: response.text,
+                sender: 'bot',
+                timestamp: new Date(),
+                isFallback: response.isFallback,
+            };
+            setMessages((prev) => [...prev, botMessage]);
+            setIsTyping(false);
+        }, 1500); // 1.5 seconds delay for gear animation feel
+    };
+
+    const handleQuickAction = (value: string, label: string) => {
+        handleSend(label);
+    };
+
+    const handleCopyEmail = () => {
+        navigator.clipboard.writeText('your-email@example.com');
+        alert('이메일 주소가 복사되었습니다!');
+    };
+
+    const scrollToContact = () => {
+        onClose();
+        const contactSection = document.getElementById('contact');
+        contactSection?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    return (
+        <div className="chat-interface">
+            <div className="chat-header">
+                <h3>포트폴리오 비서</h3>
+                <button className="close-btn" onClick={onClose}>×</button>
+            </div>
+
+            <div className="chat-messages">
+                {messages.map((msg) => (
+                    <React.Fragment key={msg.id}>
+                        <Message message={msg} />
+                        {msg.isFallback && (
+                            <div className="fallback-actions">
+                                <button onClick={scrollToContact}>📍 연락처 섹션으로 이동</button>
+                                <button onClick={handleCopyEmail}>📋 이메일 주소 복사</button>
+                                <a href="mailto:your-email@example.com" className="email-link">📧 메일 앱 열기</a>
+                            </div>
+                        )}
+                    </React.Fragment>
+                ))}
+                {isTyping && (
+                    <Message
+                        message={{
+                            id: 'typing',
+                            text: '',
+                            sender: 'bot',
+                            timestamp: new Date(),
+                        }}
+                        isTyping={true}
+                    />
+                )}
+                <div ref={messagesEndRef} />
+            </div>
+
+            <div className="chat-footer">
+                <div className="quick-actions">
+                    {QUICK_ACTIONS.map((action) => (
+                        <button
+                            key={action.value}
+                            onClick={() => handleQuickAction(action.value, action.label)}
+                            disabled={isTyping}
+                        >
+                            {action.label}
+                        </button>
+                    ))}
+                </div>
+                <form
+                    className="chat-input-form"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSend(inputValue);
+                    }}
+                >
+                    <input
+                        type="text"
+                        placeholder="궁금한 것을 입력하세요..."
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        disabled={isTyping}
+                    />
+                    <button type="submit" disabled={isTyping || !inputValue.trim()}>
+                        전송
+                    </button>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default ChatInterface;

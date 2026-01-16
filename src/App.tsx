@@ -6,6 +6,7 @@ import Contact from './components/Contact';
 import ProjectCard from './components/ProjectCard';
 import TechBadge from './components/TechBadge';
 import ParticleBackground from './components/ParticleBackground'; // Import particles
+import Chatbot from './components/Chatbot/Chatbot';
 
 function App() {
   // Extract unique skills from all projects
@@ -27,10 +28,10 @@ function App() {
       <header id="home" className="App-header">
         <ParticleBackground />
         <div className="header-content">
-            <h1>안녕하세요!</h1>
-            <p>이곳은 저의 기술적 여정과 프로젝트를 담은 포트폴리오 웹사이트입니다.</p>
-            <p>React와 TypeScript를 사용하여 제작되었습니다.</p>
-            <a href="#projects" className="App-link">프로젝트 보러가기</a>
+          <h1>안녕하세요!</h1>
+          <p>이곳은 저의 기술적 여정과 프로젝트를 담은 포트폴리오 웹사이트입니다.</p>
+          <p>React와 TypeScript를 사용하여 제작되었습니다.</p>
+          <a href="#projects" className="App-link">프로젝트 보러가기</a>
         </div>
       </header>
 
@@ -41,26 +42,26 @@ function App() {
 
         {/* Skills Section */}
         <section id="skills" className="skills-section-main">
-            <div className="section-container">
-                <h2 className="section-title">보유 기술</h2>
-                <div className="skills-list">
-                {uniqueTech.map(tech => (
-                    <TechBadge key={tech} tech={tech} />
-                ))}
-                </div>
+          <div className="section-container">
+            <h2 className="section-title">보유 기술</h2>
+            <div className="skills-list">
+              {uniqueTech.map(tech => (
+                <TechBadge key={tech} tech={tech} />
+              ))}
             </div>
+          </div>
         </section>
 
         {/* Projects Section */}
         <section id="projects" className="projects-section-main">
-            <div className="section-container">
-                <h2 className="section-title">프로젝트</h2>
-                <div className="projects-grid">
-                {projects.map((project) => (
-                    <ProjectCard key={project.title} project={project} />
-                ))}
-                </div>
+          <div className="section-container">
+            <h2 className="section-title">프로젝트</h2>
+            <div className="projects-grid">
+              {projects.map((project) => (
+                <ProjectCard key={project.title} project={project} />
+              ))}
             </div>
+          </div>
         </section>
 
         {/* Contact Section */}
@@ -70,6 +71,7 @@ function App() {
       <footer className="app-footer">
         <p>&copy; 2024. All rights reserved.</p>
       </footer>
+      <Chatbot />
     </div>
   );
 }
