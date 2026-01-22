@@ -1,22 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Message from './Message';
-import { MessageType, QUICK_ACTIONS, getBotResponse } from '../../data/chatbotData';
+import { MessageType, QUICK_ACTIONS } from '../../data/chatbotData';
 
 interface ChatInterfaceProps {
     onClose: () => void;
 }
 
+const API_URL = 'http://localhost:8000';
+
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
     const [messages, setMessages] = useState<MessageType[]>([
         {
             id: 'welcome',
-            text: '안녕하세요! 무엇을 도와드릴까요?',
+            text: '안녕하세요! 포트폴리오에 대해 궁금한 것을 물어보세요.',
             sender: 'bot',
             timestamp: new Date(),
         },
     ]);
     const [inputValue, setInputValue] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [sessionId, setSessionId] = useState<string | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -27,8 +30,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
         scrollToBottom();
     }, [messages, isTyping]);
 
-    const handleSend = (text: string) => {
-        if (!text.trim()) return;
+    const handleSend = async (text: string) => {
+        if (!text.trim() || isTyping) return;
 
         const userMessage: MessageType = {
             id: Date.now().toString(),
@@ -41,19 +44,42 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
         setInputValue('');
         setIsTyping(true);
 
-        // Simulate bot thinking/typing
-        setTimeout(() => {
-            const response = getBotResponse(text);
+        try {
+            const response = await fetch(`${API_URL}/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: text,
+                    session_id: sessionId,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!sessionId) {
+                setSessionId(data.session_id);
+            }
+
             const botMessage: MessageType = {
                 id: (Date.now() + 1).toString(),
-                text: response.text,
+                text: data.response,
                 sender: 'bot',
                 timestamp: new Date(),
-                isFallback: response.isFallback,
             };
+
             setMessages((prev) => [...prev, botMessage]);
+        } catch (error) {
+            const errorMessage: MessageType = {
+                id: (Date.now() + 1).toString(),
+                text: '서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요.',
+                sender: 'bot',
+                timestamp: new Date(),
+                isFallback: true,
+            };
+            setMessages((prev) => [...prev, errorMessage]);
+        } finally {
             setIsTyping(false);
-        }, 1500); // 1.5 seconds delay for gear animation feel
+        }
     };
 
     const handleQuickAction = (value: string, label: string) => {
@@ -74,7 +100,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
     return (
         <div className="chat-interface">
             <div className="chat-header">
-                <h3>포트폴리오 비서</h3>
+                <h3>포트폴리오 AI 비서</h3>
                 <button className="close-btn" onClick={onClose}>×</button>
             </div>
 
@@ -126,7 +152,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
                 >
                     <input
                         type="text"
-                        placeholder="궁금한 것을 입력하세요..."
+                        placeholder="프로젝트, 기술 스택 등을 물어보세요..."
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         disabled={isTyping}
