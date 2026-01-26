@@ -37,18 +37,18 @@ export const projects: Project[] = [
   {
     title: "3D 소셜 메타버스 플랫폼 (MetaPlaza)",
     description: "React와 Three.js, Spring Boot를 활용한 3D 소셜 커뮤니티 플랫폼입니다. 가상 광장에서 실시간 멀티플레이어 상호작용, 채팅, 친구 시스템, 미니게임(오목, 반응속도), 아바타 커스터마이징, 상점/결제 시스템을 제공합니다. WebSocket(STOMP) 기반 실시간 동기화와 Mapbox 지도 연동을 지원합니다.",
-    techStack: ["React", "Three.js", "Spring Boot", "PostgreSQL", "WebSocket", "TossPayments"],
+    techStack: ["Java", "Spring Boot", "PostgreSQL", "React", "Three.js", "WebSocket", "TossPayments"],
     githubUrl: "https://github.com/kimkichan1225/3DCommunity",
     thumbnail: "https://via.placeholder.com/400x250.png?text=MetaPlaza+3D",
-    learnings: "React Three Fiber와 Rapier 물리 엔진을 활용한 3D 캐릭터 제어 및 실시간 멀티플레이어 동기화를 구현했습니다. Spring Boot와 WebSocket(STOMP)을 연동한 백엔드 개발, JWT 기반 인증, TossPayments 결제 연동 등 풀스택 개발 경험을 쌓았습니다.",
+    learnings: "Java/Spring Boot 기반 RESTful API 설계 및 WebSocket(STOMP) 실시간 통신 서버를 구축했습니다. PostgreSQL 연동, JWT 인증/인가, TossPayments 결제 시스템을 구현하며 백엔드 개발 역량을 키웠습니다. React Three Fiber와 Rapier 물리 엔진으로 3D 멀티플레이어 동기화를 구현해 풀스택 경험을 쌓았습니다.",
   },
   {
     title: "실시간 데스크톱 메신저 (Messenger)",
     description: "Electron 기반의 실시간 메신저 데스크톱 애플리케이션입니다. MetaPlaza의 Spring Boot 백엔드와 연동되어 1:1 DM 및 그룹 채팅, 읽음 상태 표시, 타이핑 인디케이터, 데스크톱 알림, 다크 모드를 지원합니다. WebSocket(STOMP)을 통한 실시간 메시지 송수신과 자동 재연결 기능을 제공합니다.",
-    techStack: ["Electron", "React", "WebSocket", "Spring Boot", "PostgreSQL", "JWT"],
+    techStack: ["Java", "Spring Boot", "PostgreSQL", "Electron", "React", "WebSocket", "JWT"],
     githubUrl: "https://github.com/205PreDev/Messenger",
     thumbnail: "https://via.placeholder.com/400x250.png?text=Desktop+Messenger",
-    learnings: "Electron을 활용한 크로스 플랫폼 데스크톱 앱 개발을 경험했습니다. Main Process와 Renderer Process 간의 IPC 통신, preload 스크립트를 통한 보안 컨텍스트 분리를 이해했습니다. WebSocket 기반 실시간 통신에서 연결 끊김 감지 및 자동 재연결 로직을 구현하며 안정적인 메시징 시스템을 구축했습니다.",
+    learnings: "Java/Spring Boot 백엔드와 연동하여 WebSocket(STOMP) 기반 실시간 메시징 시스템을 구현했습니다. 연결 끊김 감지 및 자동 재연결 로직으로 안정적인 통신을 구현하고, Electron의 IPC 통신과 preload 보안 컨텍스트 분리를 통해 크로스 플랫폼 데스크톱 앱 개발 경험을 쌓았습니다.",
   },
   {
     title: "교육용 3D 물리 시뮬레이터 (3DU)",
