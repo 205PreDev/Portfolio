@@ -39,7 +39,8 @@ export const projects: Project[] = [
     description: "React와 Three.js, Spring Boot를 활용한 3D 소셜 커뮤니티 플랫폼입니다. 가상 광장에서 실시간 멀티플레이어 상호작용, 채팅, 친구 시스템, 미니게임(오목, 반응속도), 아바타 커스터마이징, 상점/결제 시스템을 제공합니다. WebSocket(STOMP) 기반 실시간 동기화와 Mapbox 지도 연동을 지원합니다.",
     techStack: ["Java", "Spring Boot", "PostgreSQL", "React", "Three.js", "WebSocket", "TossPayments"],
     githubUrl: "https://github.com/205PreDev/MetaPlaza",
-    thumbnail: "https://via.placeholder.com/400x250.png?text=MetaPlaza+3D",
+    liveUrl: "https://youtu.be/1YbolamFJ-Y",
+    thumbnail: "/metaplaza-thumbnail.png",
     learnings: "Java/Spring Boot 기반 RESTful API 설계 및 WebSocket(STOMP) 실시간 통신 서버를 구축했습니다. PostgreSQL 연동, JWT 인증/인가, TossPayments 결제 시스템을 구현하며 백엔드 개발 역량을 키웠습니다. React Three Fiber와 Rapier 물리 엔진으로 3D 멀티플레이어 동기화를 구현해 풀스택 경험을 쌓았습니다.",
   },
   {

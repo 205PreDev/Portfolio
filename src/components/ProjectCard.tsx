@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Project } from '../data/projects';
 import TechBadge from './TechBadge';
 import './ProjectCard.css';
@@ -8,9 +9,28 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 유튜브 링크를 embed URL로 변환
+  const getYoutubeEmbedUrl = (url: string): string | null => {
+    const youtubeRegex = /(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9_-]+)/;
+    const match = url.match(youtubeRegex);
+    if (match) {
+      return `https://www.youtube.com/embed/${match[1]}?autoplay=1`;
+    }
+    return null;
+  };
+
+  const youtubeEmbedUrl = project.liveUrl ? getYoutubeEmbedUrl(project.liveUrl) : null;
+
   return (
     <div className="project-card">
-      <img src={project.thumbnail} alt={`${project.title} thumbnail`} className="project-thumbnail" />
+      <img
+        src={project.thumbnail}
+        alt={`${project.title} thumbnail`}
+        className="project-thumbnail"
+        onClick={() => setIsModalOpen(true)}
+      />
       <div className="project-content">
         <h3 className="project-title">{project.title}</h3>
         <p className="project-description">{project.description}</p>
@@ -36,6 +56,29 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           )}
         </div>
       </div>
+
+      {isModalOpen && createPortal(
+        <div className="image-modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className={`image-modal-content ${youtubeEmbedUrl ? 'video-modal' : ''}`} onClick={(e) => e.stopPropagation()}>
+            {youtubeEmbedUrl ? (
+              <iframe
+                src={youtubeEmbedUrl}
+                title={project.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="youtube-player"
+              />
+            ) : (
+              <img src={project.thumbnail} alt={`${project.title} full`} />
+            )}
+            <button className="image-modal-close" onClick={() => setIsModalOpen(false)}>
+              ×
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 };
