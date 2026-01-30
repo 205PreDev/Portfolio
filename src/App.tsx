@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { projects } from './data/projects';
 import About from './components/About';
@@ -8,7 +8,20 @@ import TechBadge from './components/TechBadge';
 import ParticleBackground from './components/ParticleBackground'; // Import particles
 import Chatbot from './components/Chatbot/Chatbot';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
 function App() {
+  // 백엔드 서버 콜드 스타트 워밍업
+  useEffect(() => {
+    const warmupBackend = async () => {
+      try {
+        await fetch(API_URL, { method: 'GET' });
+      } catch {
+        // 워밍업 실패는 무시 (사용자 경험에 영향 없음)
+      }
+    };
+    warmupBackend();
+  }, []);
   // Extract unique skills from all projects
   const allTech = projects.flatMap(p => p.techStack);
   const uniqueTech = Array.from(new Set(allTech));

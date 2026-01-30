@@ -136,7 +136,8 @@
   aspect-ratio: 16 / 9;
 }
 
-.youtube-player {
+.youtube-player,
+.local-video-player {
   width: 100%;
   height: 100%;
   border-radius: 8px;

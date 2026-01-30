@@ -16,12 +16,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     const youtubeRegex = /(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9_-]+)/;
     const match = url.match(youtubeRegex);
     if (match) {
-      return `https://www.youtube.com/embed/${match[1]}?autoplay=1`;
+      return `https://www.youtube.com/embed/${match[1]}?autoplay=1&mute=1`;
     }
     return null;
   };
 
   const youtubeEmbedUrl = project.liveUrl ? getYoutubeEmbedUrl(project.liveUrl) : null;
+  const isLocalVideo = project.liveUrl?.endsWith('.mp4');
 
   return (
     <div className="project-card">
@@ -59,7 +60,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
       {isModalOpen && createPortal(
         <div className="image-modal-overlay" onClick={() => setIsModalOpen(false)}>
-          <div className={`image-modal-content ${youtubeEmbedUrl ? 'video-modal' : ''}`} onClick={(e) => e.stopPropagation()}>
+          <div className={`image-modal-content ${youtubeEmbedUrl || isLocalVideo ? 'video-modal' : ''}`} onClick={(e) => e.stopPropagation()}>
             {youtubeEmbedUrl ? (
               <iframe
                 src={youtubeEmbedUrl}
@@ -68,6 +69,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="youtube-player"
+              />
+            ) : isLocalVideo ? (
+              <video
+                src={project.liveUrl}
+                controls
+                autoPlay
+                muted
+                className="local-video-player"
               />
             ) : (
               <img src={project.thumbnail} alt={`${project.title} full`} />
