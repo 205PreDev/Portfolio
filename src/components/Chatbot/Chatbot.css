@@ -269,6 +269,14 @@
   cursor: not-allowed;
 }
 
+.chat-input-form .abort-btn {
+  background: #dc3545;
+}
+
+.chat-input-form .abort-btn:hover {
+  background: #c82333;
+}
+
 /* Scrollbar */
 .chat-messages::-webkit-scrollbar {
   width: 5px;

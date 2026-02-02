@@ -7,20 +7,48 @@ interface ChatInterfaceProps {
 }
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const STORAGE_KEY = 'portfolio-chat-history';
+
+const getInitialMessages = (): MessageType[] => {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            return parsed.messages.map((msg: MessageType) => ({
+                ...msg,
+                timestamp: new Date(msg.timestamp),
+            }));
+        }
+    } catch {
+        // 파싱 실패 시 기본값 사용
+    }
+    return [{
+        id: 'welcome',
+        text: '안녕하세요! 포트폴리오에 대해 궁금한 것을 물어보세요.',
+        sender: 'bot',
+        timestamp: new Date(),
+    }];
+};
+
+const getInitialSessionId = (): string | null => {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            return JSON.parse(saved).sessionId || null;
+        }
+    } catch {
+        // 파싱 실패 시 null 반환
+    }
+    return null;
+};
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
-    const [messages, setMessages] = useState<MessageType[]>([
-        {
-            id: 'welcome',
-            text: '안녕하세요! 포트폴리오에 대해 궁금한 것을 물어보세요.',
-            sender: 'bot',
-            timestamp: new Date(),
-        },
-    ]);
+    const [messages, setMessages] = useState<MessageType[]>(getInitialMessages);
     const [inputValue, setInputValue] = useState('');
     const [isTyping, setIsTyping] = useState(false);
-    const [sessionId, setSessionId] = useState<string | null>(null);
+    const [sessionId, setSessionId] = useState<string | null>(getInitialSessionId);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const abortControllerRef = useRef<AbortController | null>(null);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -29,6 +57,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
     useEffect(() => {
         scrollToBottom();
     }, [messages, isTyping]);
+
+    // 대화 기록 localStorage에 저장
+    useEffect(() => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            messages,
+            sessionId,
+        }));
+    }, [messages, sessionId]);
 
     const handleSend = async (text: string) => {
         if (!text.trim() || isTyping) return;
@@ -44,6 +80,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
         setInputValue('');
         setIsTyping(true);
 
+        abortControllerRef.current = new AbortController();
+
         try {
             const response = await fetch(`${API_URL}/chat`, {
                 method: 'POST',
@@ -52,6 +90,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
                     message: text,
                     session_id: sessionId,
                 }),
+                signal: abortControllerRef.current.signal,
             });
 
             const data = await response.json();
@@ -69,6 +108,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
 
             setMessages((prev) => [...prev, botMessage]);
         } catch (error) {
+            if (error instanceof Error && error.name === 'AbortError') {
+                // 사용자가 요청을 중단함 - 메시지 표시하지 않음
+                return;
+            }
             const errorMessage: MessageType = {
                 id: (Date.now() + 1).toString(),
                 text: '서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요.',
@@ -78,7 +121,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
             };
             setMessages((prev) => [...prev, errorMessage]);
         } finally {
+            abortControllerRef.current = null;
             setIsTyping(false);
+        }
+    };
+
+    const handleAbort = () => {
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
         }
     };
 
@@ -157,9 +207,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onClose }) => {
                         onChange={(e) => setInputValue(e.target.value)}
                         disabled={isTyping}
                     />
-                    <button type="submit" disabled={isTyping || !inputValue.trim()}>
-                        전송
-                    </button>
+                    {isTyping ? (
+                        <button type="button" className="abort-btn" onClick={handleAbort}>
+                            중단
+                        </button>
+                    ) : (
+                        <button type="submit" disabled={!inputValue.trim()}>
+                            전송
+                        </button>
+                    )}
                 </form>
             </div>
         </div>
