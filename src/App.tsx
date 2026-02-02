@@ -5,7 +5,7 @@ import About from './components/About';
 import Contact from './components/Contact';
 import ProjectCard from './components/ProjectCard';
 import TechBadge from './components/TechBadge';
-import ParticleBackground from './components/ParticleBackground'; // Import particles
+import AIFace from './components/AIFace';
 import Chatbot from './components/Chatbot/Chatbot';
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
 
   return (
     <div className="App">
+      <title>이영호의 포트폴리오</title>
       {/* Navigation */}
       <nav className="main-nav">
         <a href="#home">홈</a>
@@ -26,7 +27,7 @@ function App() {
 
       {/* Home Section */}
       <header id="home" className="App-header">
-        <ParticleBackground />
+        <AIFace />
         <div className="header-content">
           <h1>안녕하세요!</h1>
           <p>이곳은 저의 기술적 여정과 프로젝트를 담은 포트폴리오 웹사이트입니다.</p>
@@ -69,7 +70,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>&copy; 2024. All rights reserved.</p>
+        <p>&copy; 2026. All rights reserved.</p>
       </footer>
       <Chatbot />
     </div>
