@@ -5,7 +5,6 @@ import About from './components/About';
 import Contact from './components/Contact';
 import ProjectCard from './components/ProjectCard';
 import TechBadge from './components/TechBadge';
-import AIFace from './components/AIFace';
 import Chatbot from './components/Chatbot/Chatbot';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -40,7 +39,6 @@ function App() {
 
       {/* Home Section */}
       <header id="home" className="App-header">
-        <AIFace />
         <div className="header-content">
           <h1>안녕하세요!</h1>
           <p>이곳은 저의 기술적 여정과 프로젝트를 담은 포트폴리오 웹사이트입니다.</p>
