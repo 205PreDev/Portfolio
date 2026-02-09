@@ -4,7 +4,7 @@ import About from './components/About';
 import Contact from './components/Contact';
 import ProjectCard from './components/ProjectCard';
 import TechBadge from './components/TechBadge';
-import PDFDownloadCard from './components/PDFDownloadCard';
+import PDFDownloadButton from './components/PDFDownloadButton';
 import Chatbot from './components/Chatbot/Chatbot';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -30,7 +30,7 @@ function App() {
       <nav className="glass fixed top-0 left-0 right-0 z-50 px-6 py-4">
         <div className="mx-auto max-w-6xl flex items-center justify-between">
           <span className="text-lg font-bold tracking-tight">이영호</span>
-          <div className="flex gap-6">
+          <div className="flex items-center gap-6">
             {[
               ['#about', '소개'],
               ['#skills', '기술'],
@@ -45,6 +45,7 @@ function App() {
                 {label}
               </a>
             ))}
+            <PDFDownloadButton />
           </div>
         </div>
       </nav>
@@ -78,12 +79,9 @@ function App() {
           </div>
         </section>
 
-        {/* Row: Contact + PDF */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="md:col-span-2">
-            <Contact />
-          </div>
-          <PDFDownloadCard />
+        {/* Row: Contact */}
+        <div className="grid grid-cols-1 gap-4">
+          <Contact />
         </div>
       </main>
 
