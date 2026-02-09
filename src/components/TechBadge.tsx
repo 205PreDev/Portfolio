@@ -1,12 +1,13 @@
-import React from 'react';
-import './TechBadge.css';
-
 interface TechBadgeProps {
   tech: string;
 }
 
-const TechBadge: React.FC<TechBadgeProps> = ({ tech }) => {
-  return <span className="tech-badge">{tech}</span>;
+const TechBadge = ({ tech }: TechBadgeProps) => {
+  return (
+    <span className="inline-block px-2.5 py-1 text-xs font-medium rounded-lg bg-primary/10 text-primary-light border border-primary/20">
+      {tech}
+    </span>
+  );
 };
 
 export default TechBadge;

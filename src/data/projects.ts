@@ -5,7 +5,8 @@ export interface Project {
   githubUrl: string;
   liveUrl?: string;
   thumbnail: string;
-  learnings: string; // 새로 추가된 항목
+  images?: string[];   // 추가 스크린샷 (슬라이드용)
+  learnings: string;
 }
 
 export const projects: Project[] = [

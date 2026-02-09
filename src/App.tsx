@@ -1,62 +1,66 @@
-import React, { useEffect } from 'react';
-import './App.css';
+import { useEffect } from 'react';
 import { projects } from './data/projects';
 import About from './components/About';
 import Contact from './components/Contact';
 import ProjectCard from './components/ProjectCard';
 import TechBadge from './components/TechBadge';
+import PDFDownloadCard from './components/PDFDownloadCard';
 import Chatbot from './components/Chatbot/Chatbot';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function App() {
-  // 백엔드 서버 콜드 스타트 워밍업
   useEffect(() => {
     const warmupBackend = async () => {
       try {
         await fetch(API_URL, { method: 'GET' });
       } catch {
-        // 워밍업 실패는 무시 (사용자 경험에 영향 없음)
+        // 워밍업 실패는 무시
       }
     };
     warmupBackend();
   }, []);
-  // Extract unique skills from all projects
+
   const allTech = projects.flatMap(p => p.techStack);
   const uniqueTech = Array.from(new Set(allTech));
 
   return (
-    <div className="App">
-      <title>이영호의 포트폴리오</title>
-      {/* Navigation */}
-      <nav className="main-nav">
-        <a href="#home">홈</a>
-        <a href="#about">소개</a>
-        <a href="#skills">보유 기술</a>
-        <a href="#projects">프로젝트</a>
-        <a href="#contact">연락처</a>
+    <div className="min-h-screen bg-surface text-text-primary">
+      {/* Glassmorphism Nav */}
+      <nav className="glass fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div className="mx-auto max-w-6xl flex items-center justify-between">
+          <span className="text-lg font-bold tracking-tight">이영호</span>
+          <div className="flex gap-6">
+            {[
+              ['#about', '소개'],
+              ['#skills', '기술'],
+              ['#projects', '프로젝트'],
+              ['#contact', '연락처'],
+            ].map(([href, label]) => (
+              <a
+                key={href}
+                href={href}
+                className="text-sm text-text-secondary hover:text-white transition-colors"
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
       </nav>
 
-      {/* Home Section */}
-      <header id="home" className="App-header">
-        <div className="header-content">
-          <h1>안녕하세요!</h1>
-          <p>이곳은 저의 기술적 여정과 프로젝트를 담은 포트폴리오 웹사이트입니다.</p>
-          <p>React와 TypeScript를 사용하여 제작되었습니다.</p>
-          <a href="#projects" className="App-link">프로젝트 보러가기</a>
+      {/* Bento Grid */}
+      <main className="mx-auto max-w-6xl px-4 pt-24 pb-12">
+        {/* Row 1: Profile + Intro */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <About />
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main>
-        {/* About Section */}
-        <About />
-
-        {/* Skills Section */}
-        <section id="skills" className="skills-section-main">
-          <div className="section-container">
-            <h2 className="section-title">보유 기술</h2>
-            <div className="skills-list">
+        {/* Row 2: Skills */}
+        <section id="skills" className="mb-4">
+          <div className="bento-card">
+            <h2 className="text-xl font-bold mb-4">보유 기술</h2>
+            <div className="flex flex-wrap gap-2">
               {uniqueTech.map(tech => (
                 <TechBadge key={tech} tech={tech} />
               ))}
@@ -64,25 +68,30 @@ function App() {
           </div>
         </section>
 
-        {/* Projects Section */}
-        <section id="projects" className="projects-section-main">
-          <div className="section-container">
-            <h2 className="section-title">프로젝트</h2>
-            <div className="projects-grid">
-              {projects.map((project) => (
-                <ProjectCard key={project.title} project={project} />
-              ))}
-            </div>
+        {/* Row 3+: Projects Grid */}
+        <section id="projects" className="mb-4">
+          <h2 className="text-2xl font-bold mb-4 px-2">프로젝트</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {projects.map((project) => (
+              <ProjectCard key={project.title} project={project} />
+            ))}
           </div>
         </section>
 
-        {/* Contact Section */}
-        <Contact />
+        {/* Row: Contact + PDF */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="md:col-span-2">
+            <Contact />
+          </div>
+          <PDFDownloadCard />
+        </div>
       </main>
 
-      <footer className="app-footer">
-        <p>&copy; 2026. All rights reserved.</p>
+      {/* Footer */}
+      <footer className="border-t border-border-subtle py-6 text-center text-sm text-text-secondary">
+        &copy; 2026. All rights reserved.
       </footer>
+
       <Chatbot />
     </div>
   );
