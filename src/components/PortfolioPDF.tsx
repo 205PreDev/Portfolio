@@ -206,6 +206,43 @@ const proj = StyleSheet.create({
     lineHeight: 1.7,
     color: C.grayLight,
   },
+  // 문제 해결 섹션
+  challengeWrap: {
+    marginTop: 16,
+  },
+  challengeCard: {
+    backgroundColor: C.darkCard,
+    borderRadius: 8,
+    marginBottom: 8,
+    overflow: 'hidden',
+  },
+  challengeProblem: {
+    padding: '8 12',
+    backgroundColor: 'rgba(239, 68, 68, 0.06)',
+    borderBottomWidth: 1,
+    borderBottomColor: C.border,
+  },
+  challengeSolution: {
+    padding: '8 12',
+    backgroundColor: 'rgba(34, 197, 94, 0.06)',
+  },
+  challengeLabel: {
+    fontSize: 7,
+    fontWeight: 700,
+    letterSpacing: 1,
+    marginBottom: 3,
+  },
+  challengeProblemLabel: {
+    color: '#f87171',
+  },
+  challengeSolutionLabel: {
+    color: '#4ade80',
+  },
+  challengeText: {
+    fontSize: 8,
+    lineHeight: 1.6,
+    color: C.grayLight,
+  },
   linksRow: {
     flexDirection: 'row',
     gap: 16,
@@ -267,7 +304,7 @@ const PortfolioPDF = () => {
           <Image style={cover.photoImg} src={new URL('/myshot.png', window.location.origin).href} />
         </View>
         <Text style={cover.name}>이영호</Text>
-        <Text style={cover.role}>Web Developer Portfolio</Text>
+        <Text style={cover.role}>Full-Stack Developer Portfolio</Text>
         <View style={cover.divider} />
         <View style={cover.contactRow}>
           <Text>lyh2050609@gmail.com</Text>
@@ -283,9 +320,13 @@ const PortfolioPDF = () => {
         <Text style={profile.sectionLabel}>ABOUT</Text>
         <Text style={profile.heading}>개발자 소개</Text>
         <Text style={profile.body}>
-          웹 기술을 통해 아이디어를 현실로 만드는 것을 즐기는 개발자입니다.{'\n'}
-          사용자에게 가치 있는 경험을 제공하는 깔끔하고 효율적인 코드를 작성하기 위해 항상 노력합니다.{'\n'}
-          새로운 기술을 배우고 동료들과 지식을 공유하는 과정에서 큰 보람을 느낍니다.
+          뭘 쓰느냐보다 어떻게 쓰느냐가 중요하다고 믿는 개발자입니다. AI를 적극 활용해 반복 작업을 줄이고, 아낀 시간을 설계와 코드 품질에 투자합니다.
+        </Text>
+        <Text style={profile.body}>
+          이 포트폴리오 자체도 Claude Code와의 페어 프로그래밍으로 제작했고, Convi 프로젝트에서는 AI로 Supabase RLS 정책 17개 테이블의 보안 규칙을 검증하고 TanStack Query 캐시 전략을 설계했습니다. 3DU에서는 RK4 물리 수식 구현 시 AI 코드 리뷰로 엣지 케이스를 사전에 잡아냈습니다.
+        </Text>
+        <Text style={profile.body}>
+          막히면 공식 문서 → 커뮤니티 → 직접 실험 순서로 풀어가며, 읽는 사람이 바로 이해할 수 있는 코드를 좋은 코드의 기준으로 삼고 있습니다.
         </Text>
         <Text style={profile.body}>
           취미: 인디게임 제작 | 특기: 탁구
@@ -327,12 +368,30 @@ const PortfolioPDF = () => {
             </View>
 
             <Text style={proj.descLabel}>OVERVIEW</Text>
-            <Text style={proj.descText}>{project.description}</Text>
+            <Text style={proj.descText}>{project.detail}</Text>
 
             <View style={proj.learningsBox}>
               <Text style={proj.learningsLabel}>WHAT I LEARNED</Text>
               <Text style={proj.learningsText}>{project.learnings}</Text>
             </View>
+
+            {project.challenges.length > 0 && (
+              <View style={proj.challengeWrap}>
+                <Text style={proj.descLabel}>PROBLEM SOLVING</Text>
+                {project.challenges.map((c, i) => (
+                  <View key={i} style={proj.challengeCard}>
+                    <View style={proj.challengeProblem}>
+                      <Text style={[proj.challengeLabel, proj.challengeProblemLabel]}>PROBLEM</Text>
+                      <Text style={proj.challengeText}>{c.problem}</Text>
+                    </View>
+                    <View style={proj.challengeSolution}>
+                      <Text style={[proj.challengeLabel, proj.challengeSolutionLabel]}>SOLUTION</Text>
+                      <Text style={proj.challengeText}>{c.solution}</Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            )}
 
             <View style={proj.linksRow}>
               <Link style={proj.link} src={project.githubUrl}>
