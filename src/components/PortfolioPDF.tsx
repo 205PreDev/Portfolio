@@ -127,7 +127,7 @@ const proj = StyleSheet.create({
   page: { ...base.page, padding: 0 },
   // 상단 썸네일 영역
   heroWrap: {
-    height: 260,
+    height: 160,
     position: 'relative',
   },
   heroImage: {
@@ -154,10 +154,10 @@ const proj = StyleSheet.create({
   },
   // 본문
   content: {
-    padding: '24 50 50 50',
+    padding: '16 40 30 40',
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 700,
     marginBottom: 4,
   },
@@ -165,8 +165,8 @@ const proj = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 4,
-    marginTop: 8,
-    marginBottom: 20,
+    marginTop: 6,
+    marginBottom: 12,
   },
   techTag: {
     fontSize: 8,
@@ -180,50 +180,50 @@ const proj = StyleSheet.create({
     fontWeight: 700,
     color: C.accent,
     letterSpacing: 2,
-    marginBottom: 8,
+    marginBottom: 4,
   },
   descText: {
-    fontSize: 10,
-    lineHeight: 1.7,
+    fontSize: 8,
+    lineHeight: 1.6,
     color: C.grayLight,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   learningsBox: {
     backgroundColor: C.darkCard,
-    borderRadius: 8,
-    padding: 16,
+    borderRadius: 6,
+    padding: 10,
     borderLeftWidth: 3,
     borderLeftColor: C.accent,
   },
   learningsLabel: {
-    fontSize: 9,
+    fontSize: 7,
     fontWeight: 700,
     color: C.accent,
-    marginBottom: 6,
+    marginBottom: 4,
   },
   learningsText: {
-    fontSize: 9,
-    lineHeight: 1.7,
+    fontSize: 7,
+    lineHeight: 1.6,
     color: C.grayLight,
   },
   // 문제 해결 섹션
   challengeWrap: {
-    marginTop: 16,
+    marginTop: 10,
   },
   challengeCard: {
     backgroundColor: C.darkCard,
-    borderRadius: 8,
-    marginBottom: 8,
+    borderRadius: 6,
+    marginBottom: 6,
     overflow: 'hidden',
   },
   challengeProblem: {
-    padding: '8 12',
+    padding: '6 10',
     backgroundColor: 'rgba(239, 68, 68, 0.06)',
     borderBottomWidth: 1,
     borderBottomColor: C.border,
   },
   challengeSolution: {
-    padding: '8 12',
+    padding: '6 10',
     backgroundColor: 'rgba(34, 197, 94, 0.06)',
   },
   challengeLabel: {
@@ -239,8 +239,8 @@ const proj = StyleSheet.create({
     color: '#4ade80',
   },
   challengeText: {
-    fontSize: 8,
-    lineHeight: 1.6,
+    fontSize: 7,
+    lineHeight: 1.5,
     color: C.grayLight,
   },
   linksRow: {
@@ -393,16 +393,6 @@ const PortfolioPDF = () => {
               </View>
             )}
 
-            <View style={proj.linksRow}>
-              <Link style={proj.link} src={project.githubUrl}>
-                GitHub Repository
-              </Link>
-              {project.liveUrl && !project.liveUrl.endsWith('.mp4') && (
-                <Link style={proj.link} src={project.liveUrl}>
-                  Live Demo
-                </Link>
-              )}
-            </View>
           </View>
 
           <Text style={proj.pageLabel}>이영호 포트폴리오</Text>
