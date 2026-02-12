@@ -8,8 +8,8 @@ const About = () => {
         <img
           src="/myshot.png"
           alt="이영호 프로필"
-          width={533}
-          height={512}
+          width={266}
+          height={256}
           className="rounded-2xl object-cover border-2 border-primary/40 mb-4"
         />
         <h1 className="text-2xl font-bold mb-1">이영호</h1>
